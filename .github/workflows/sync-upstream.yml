@@ -1,0 +1,19 @@
+name: Sync with upstream
+
+on:
+  schedule:
+    - cron: '5 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge upstream main into fork
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/WinM-Tech/rea/merge-upstream -f branch=main --jq '"message=\(.message) merge_type=\(.merge_type) base=\(.base_branch)"'
